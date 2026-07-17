@@ -179,19 +179,42 @@ export default function Home() {
     };
   });
   const [copied, setCopied] = useState(false);
+  const [isTransforming, setIsTransforming] = useState(false);
+  const [transformError, setTransformError] = useState("");
 
   const sourceCount = useMemo(() => countWords(summary), [summary]);
   const outputCount = countWords(outputs[activeTab]);
 
-  function transform() {
-    const items = sentences(summary);
-    if (!items.length) return;
-    setOutputs({
-      genz: makeGenZ(items),
-      simple: makeSimple(items),
-      cheatsheet: makeCheatsheet(items),
-    });
-    setActiveTab("genz");
+  async function transform() {
+    if (!summary.trim() || isTransforming) return;
+    setIsTransforming(true);
+    setTransformError("");
+
+    try {
+      const response = await fetch("/api/transform", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ summary }),
+      });
+      const data = (await response.json()) as Partial<Record<Tab, string>> & {
+        error?: string;
+      };
+      if (!response.ok || !data.genz || !data.simple || !data.cheatsheet) {
+        throw new Error(data.error ?? "The rewrite could not be completed.");
+      }
+      setOutputs({
+        genz: data.genz,
+        simple: data.simple,
+        cheatsheet: data.cheatsheet,
+      });
+      setActiveTab("genz");
+    } catch (error) {
+      setTransformError(
+        error instanceof Error ? error.message : "The rewrite could not be completed.",
+      );
+    } finally {
+      setIsTransforming(false);
+    }
   }
 
   async function copyOutput() {
@@ -255,12 +278,17 @@ export default function Home() {
               className="transform-button"
               type="button"
               onClick={transform}
-              disabled={!summary.trim()}
+              disabled={!summary.trim() || isTransforming}
             >
-              Transform text
-              <span aria-hidden="true">↗</span>
+              {isTransforming ? "Reworking…" : "Transform text"}
+              <span aria-hidden="true">{isTransforming ? "…" : "↗"}</span>
             </button>
           </div>
+          {transformError ? (
+            <p className="transform-error" role="alert">
+              {transformError}
+            </p>
+          ) : null}
         </div>
 
         <div className="output-panel">
@@ -328,7 +356,7 @@ export default function Home() {
 
       <footer>
         <span>Built for clearer communication.</span>
-        <span>Text stays in your browser.</span>
+        <span>Your text is used only to create the rewrite.</span>
       </footer>
     </main>
   );
