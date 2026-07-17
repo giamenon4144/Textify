@@ -8,15 +8,50 @@ const starter =
   "Photosynthesis is the process plants use to turn sunlight, water, and carbon dioxide into glucose and oxygen. It mainly happens in the leaves, inside structures called chloroplasts. Chlorophyll absorbs sunlight and gives plants their green color. The glucose stores energy for the plant, while oxygen is released into the air.";
 
 const replacements: Array<[RegExp, string]> = [
-  [/\butilize\b/gi, "use"],
-  [/\bobtain\b/gi, "get"],
+  [/\baccording to\b/gi, "as said by"],
+  [/\badditional(?:ly)?\b/gi, "more"],
   [/\bapproximately\b/gi, "about"],
-  [/\bprimarily\b/gi, "mostly"],
-  [/\bcommence\b/gi, "start"],
-  [/\btherefore\b/gi, "so"],
+  [/\bcommence(?:d|s|ment)?\b/gi, "start"],
+  [/\bconsequently\b/gi, "so"],
+  [/\bconsiderable\b/gi, "large"],
+  [/\bconstitutes?\b/gi, "makes up"],
+  [/\bdemonstrate(?:d|s)?\b/gi, "show"],
+  [/\bdespite the fact that\b/gi, "even though"],
+  [/\bdue to the fact that\b/gi, "because"],
+  [/\bfacilitate(?:d|s)?\b/gi, "help"],
+  [/\bfundamental\b/gi, "basic"],
   [/\bhowever\b/gi, "but"],
-  [/\badditional\b/gi, "more"],
-  [/\brequires?\b/gi, "needs"],
+  [/\bimplement(?:ed|s|ing)?\b/gi, "put in place"],
+  [/\bin addition\b/gi, "also"],
+  [/\bin order to\b/gi, "to"],
+  [/\bindicate(?:d|s)?\b/gi, "show"],
+  [/\bindividuals\b/gi, "people"],
+  [/\binitial(?:ly)?\b/gi, "first"],
+  [/\b(?:modify|modified|modification)\b/gi, "change"],
+  [/\bnumerous\b/gi, "many"],
+  [/\bobtain(?:ed|s)?\b/gi, "get"],
+  [/\boccur(?:red|s|ring)?\b/gi, "happen"],
+  [/\bparticipate(?:d|s)?\b/gi, "take part"],
+  [/\bportion\b/gi, "part"],
+  [/\bpossess(?:ed|es)?\b/gi, "have"],
+  [/\bprocess\b/gi, "way"],
+  [/\bprevious(?:ly)?\b/gi, "before"],
+  [/\bprimarily\b/gi, "mostly"],
+  [/\bprovide(?:d|s)?\b/gi, "give"],
+  [/\bpurchase(?:d|s)?\b/gi, "buy"],
+  [/\bregarding\b/gi, "about"],
+  [/\brequire(?:d|s)?\b/gi, "need"],
+  [/\bretain(?:ed|s)?\b/gi, "keep"],
+  [/\bsignificant(?:ly)?\b/gi, "important"],
+  [/\bsubsequent(?:ly)?\b/gi, "later"],
+  [/\bsufficient\b/gi, "enough"],
+  [/\btherefore\b/gi, "so"],
+  [/\btransmit(?:ted|s)?\b/gi, "send"],
+  [/\butilize(?:d|s)?\b/gi, "use"],
+  [/\bwith the exception of\b/gi, "except"],
+  [/\bstructures\b/gi, "parts"],
+  [/\babsorbs?\b/gi, "takes in"],
+  [/\breleased\b/gi, "let out"],
 ];
 
 function sentences(value: string) {
@@ -30,70 +65,100 @@ function sentences(value: string) {
   );
 }
 
-function simplify(value: string) {
+function simplifyWords(value: string) {
   let result = value;
   replacements.forEach(([pattern, replacement]) => {
     result = result.replace(pattern, replacement);
   });
   return result
-    .replace(/\(([^)]+)\)/g, ". $1.")
-    .replace(/;\s*/g, ". ")
-    .replace(/,\s+(while|but|and)\s+/gi, ". $1 ")
+    .replace(/\b(is|are|was|were) able to\b/gi, "can")
+    .replace(/\bhas the ability to\b/gi, "can")
+    .replace(/\ba large number of\b/gi, "many")
+    .replace(/\bat this point in time\b/gi, "now")
+    .replace(/\bfor the purpose of\b/gi, "to")
     .replace(/\s+/g, " ")
     .trim();
 }
 
+function splitIdeas(items: string[]) {
+  return items
+    .flatMap((item) =>
+      item
+        .replace(/\(([^)]+)\)/g, ", meaning $1,")
+        .split(/;\s*|,\s+(?=(?:but|while|whereas|which|and|so|because)\b)/i),
+    )
+    .map((idea) => simplifyWords(idea).trim())
+    .filter(Boolean)
+    .map((idea) => {
+      const cleaned = idea
+        .replace(/^(however|therefore|additionally),?\s*/i, "")
+        .replace(/^which\s+/i, "This ")
+        .replace(/^whereas\s+/i, "But ")
+        .replace(/^while\s+/i, "At the same time, ")
+        .replace(/^and\s+/i, "Also, ")
+        .replace(/^but\s+/i, "But ")
+        .replace(/^so\s+/i, "So ");
+      return cleaned.charAt(0).toUpperCase() + cleaned.slice(1).replace(/[.!?]*$/, ".");
+    });
+}
+
+function shorten(idea: string, maxWords: number) {
+  const words = idea.split(/\s+/);
+  if (words.length <= maxWords) return idea;
+  const pivot = words.findIndex(
+    (word, index) =>
+      index > 5 && /^(and|but|because|while|which|that)$/i.test(word.replace(/[,.]/g, "")),
+  );
+  if (pivot > 0) {
+    return `${words.slice(0, pivot).join(" ").replace(/[,;]$/, "")}. ${words
+      .slice(pivot)
+      .join(" ")
+      .replace(/^(and|which|that)\s+/i, "This ")}`;
+  }
+  return idea;
+}
+
 function makeGenZ(items: string[]) {
-  const hooks = [
-    "Okay, here’s the deal 👀",
-    "The main idea? It’s actually pretty simple.",
-    "Here’s what matters:",
-  ];
-  const closers = [
-    "That’s the whole vibe—same facts, way less textbook energy.",
-    "Save this one for later. ✨",
-  ];
+  const ideas = splitIdeas(items).map((idea) => shorten(idea, 22));
   return [
-    hooks[0],
+    "Okay, here’s what’s really going on 👀",
     "",
-    ...items.flatMap((item, index) => [
-      index === 0 ? hooks[1] : index === 1 ? hooks[2] : "",
-      item,
+    ...ideas.flatMap((idea, index) => [
+      index === 0 ? `The big idea: ${idea}` : index === 1 ? `Here’s the key part: ${idea}` : idea,
       "",
     ]),
-    ...closers,
+    "That’s the breakdown. Same meaning, way less textbook energy. ✨",
   ]
-    .filter((line, index, all) => line || all[index - 1] !== "")
     .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
 
 function makeSimple(items: string[]) {
-  const plain = items.map(simplify);
-  return [
-    "Let’s learn this together.",
-    ...plain,
-    "Each part matters.",
-    "Now you know the big idea.",
-  ].join(" ");
+  const ideas = splitIdeas(items)
+    .map((idea) => shorten(idea, 14))
+    .flatMap((idea) => idea.match(/[^.!?]+[.!?]+|[^.!?]+$/g) ?? [idea])
+    .map((idea) => idea.trim())
+    .filter(Boolean);
+  return ["Let’s make this easy.", ...ideas, "That is the big idea."].join(" ");
 }
 
 function cleanTerm(sentence: string) {
-  const words = sentence.replace(/[.!?]/g, "").split(/\s+/);
-  return words
-    .filter((word) => word.length > 4)
-    .sort((a, b) => b.length - a.length)[0] ?? words[0] ?? "Key fact";
+  const firstPhrase = sentence
+    .replace(/[.!?]/g, "")
+    .split(/\b(?:is|are|was|were|can|has|have|means|uses|helps|shows)\b/i)[0]
+    .trim();
+  return firstPhrase.split(/\s+/).slice(0, 3).join(" ") || "Key fact";
 }
 
 function makeCheatsheet(items: string[]) {
-  const facts = items.slice(0, 7).map((item) => {
-    const term = cleanTerm(item);
-    return `- **${term}** — ${item}`;
+  const ideas = splitIdeas(items);
+  const facts = ideas.slice(0, 7).map((idea) => {
+    const term = cleanTerm(idea);
+    const detail = shorten(idea, 18).replace(new RegExp(`^${term}\\s*`, "i"), "").trim();
+    return `- **${term}** — ${detail || idea}`;
   });
-  while (facts.length < 5) {
-    facts.push(`- **Remember** — Review the original summary’s key details.`);
-  }
-  return [`TL;DR: ${items[0] ?? "Add a summary to see the key idea."}`, "", ...facts].join(
+  return [`TL;DR: ${shorten(ideas[0] ?? "Add a summary to see the key idea.", 18)}`, "", ...facts].join(
     "\n",
   );
 }
