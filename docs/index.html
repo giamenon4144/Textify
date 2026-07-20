@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Textify turns one summary into Gen Z, simple, and exam-ready versions."
+    />
+    <title>Textify — Same facts. Better fit.</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #191919;
+        --paper: #f5f1e8;
+        --cream: #fffdf8;
+        --orange: #ff5c35;
+        --purple: #8964e8;
+        --line: #d9d3c7;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 88% 10%, rgba(137, 100, 232, 0.13), transparent 24rem),
+          var(--paper);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .page {
+        width: min(1180px, calc(100% - 40px));
+        min-height: 100vh;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        height: 86px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .brand {
+        font-size: 31px;
+        font-weight: 900;
+        letter-spacing: -2px;
+      }
+
+      .brand span {
+        color: var(--orange);
+      }
+
+      .note {
+        color: #6b675f;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      main {
+        flex: 1;
+        padding: 72px 0 56px;
+        display: grid;
+        grid-template-columns: 1.12fr 0.88fr;
+        gap: clamp(44px, 7vw, 100px);
+        align-items: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        color: var(--orange);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.18em;
+      }
+
+      h1 {
+        max-width: 700px;
+        margin: 0;
+        font-size: clamp(64px, 8vw, 112px);
+        line-height: 0.86;
+        letter-spacing: -0.075em;
+      }
+
+      h1 em {
+        color: var(--purple);
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 400;
+      }
+
+      .summary {
+        max-width: 580px;
+        margin: 34px 0 0;
+        color: #57524b;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 20px;
+        line-height: 1.65;
+      }
+
+      .launch {
+        margin-top: 34px;
+        display: inline-flex;
+        align-items: center;
+        gap: 28px;
+        padding: 16px 20px;
+        border: 1px solid var(--ink);
+        border-radius: 8px;
+        color: white;
+        background: var(--ink);
+        box-shadow: 4px 5px 0 var(--orange);
+        font-size: 13px;
+        font-weight: 900;
+        text-decoration: none;
+        transition: transform 160ms ease, box-shadow 160ms ease;
+      }
+
+      .launch:hover,
+      .launch:focus-visible {
+        transform: translateY(-2px);
+        box-shadow: 6px 8px 0 var(--orange);
+      }
+
+      .cards {
+        display: grid;
+        gap: 16px;
+      }
+
+      .card {
+        padding: 25px 26px;
+        border: 1px solid var(--ink);
+        border-radius: 13px;
+        background: var(--cream);
+        box-shadow: 4px 5px 0 var(--ink);
+        transform: rotate(-1deg);
+      }
+
+      .card:nth-child(2) {
+        margin-left: 28px;
+        transform: rotate(1deg);
+      }
+
+      .card:nth-child(3) {
+        margin-right: 20px;
+        transform: rotate(-0.5deg);
+      }
+
+      .card strong {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .card p {
+        margin: 0;
+        color: #69635a;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .genz {
+        border-top: 5px solid var(--orange);
+      }
+
+      .simple {
+        border-top: 5px solid #4f9e79;
+      }
+
+      .cheat {
+        border-top: 5px solid var(--purple);
+      }
+
+      footer {
+        padding: 25px 0 34px;
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid var(--line);
+        color: #7d776d;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      @media (max-width: 780px) {
+        .note {
+          display: none;
+        }
+
+        main {
+          grid-template-columns: 1fr;
+          padding-top: 52px;
+        }
+
+        h1 {
+          font-size: clamp(58px, 18vw, 88px);
+        }
+
+        .cards {
+          padding-bottom: 20px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .launch {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <div class="brand">textify<span>.</span></div>
+        <div class="note">ONE SUMMARY · THREE VOICES</div>
+      </header>
+
+      <main>
+        <section>
+          <p class="eyebrow">CLEARER WORDS. SAME MEANING.</p>
+          <h1>Same facts.<br /><em>Better fit.</em></h1>
+          <p class="summary">
+            Turn one summary into a social Gen Z explanation, a child-friendly
+            version, and exam-ready notes.
+          </p>
+          <a
+            class="launch"
+            href="https://textify-transform.giamenon4144.chatgpt.site/"
+            rel="noopener"
+          >
+            Open Textify <span aria-hidden="true">↗</span>
+          </a>
+        </section>
+
+        <section class="cards" aria-label="Textify output styles">
+          <article class="card genz">
+            <strong>⚡ Gen Z</strong>
+            <p>Casual, punchy, and made to click fast.</p>
+          </article>
+          <article class="card simple">
+            <strong>◡ Simple</strong>
+            <p>Short sentences and everyday words.</p>
+          </article>
+          <article class="card cheat">
+            <strong>≡ Cheat sheet</strong>
+            <p>Focused notes for quick exam practice.</p>
+          </article>
+        </section>
+      </main>
+
+      <footer>
+        <span>Textify</span>
+        <span>Built for clearer communication</span>
+      </footer>
+    </div>
+  </body>
+</html>
