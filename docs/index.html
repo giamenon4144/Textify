@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Explore Textbook Simplifier on Devpost."
+    />
+    <title>Textbook Simplifier</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #172126;
+        --paper: #f4f0e7;
+        --card: #fffdf7;
+        --accent: #ff5a36;
+        --violet: #7857d8;
+        --muted: #67645e;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        padding: 32px;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 85% 15%, rgba(120, 87, 216, 0.18), transparent 25rem),
+          linear-gradient(145deg, #f8f5ed, var(--paper));
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        width: min(760px, 100%);
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 850;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .tile {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        padding: clamp(34px, 7vw, 68px);
+        border: 2px solid var(--ink);
+        border-radius: 22px;
+        color: inherit;
+        background: var(--card);
+        box-shadow: 10px 12px 0 var(--ink);
+        text-decoration: none;
+        transition: transform 160ms ease, box-shadow 160ms ease;
+      }
+
+      .tile::after {
+        content: "↗";
+        position: absolute;
+        top: 28px;
+        right: 30px;
+        color: var(--violet);
+        font-size: 34px;
+        font-weight: 900;
+      }
+
+      .tile:hover,
+      .tile:focus-visible {
+        transform: translate(-4px, -4px);
+        box-shadow: 14px 16px 0 var(--accent);
+        outline: none;
+      }
+
+      h1 {
+        max-width: 620px;
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(48px, 9vw, 82px);
+        font-weight: 500;
+        line-height: 0.95;
+        letter-spacing: -0.055em;
+      }
+
+      p {
+        max-width: 510px;
+        margin: 26px 0 0;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.65;
+      }
+
+      .cta {
+        display: inline-block;
+        margin-top: 34px;
+        padding-bottom: 4px;
+        border-bottom: 3px solid var(--accent);
+        font-size: 13px;
+        font-weight: 850;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      @media (max-width: 520px) {
+        body {
+          padding: 20px;
+        }
+
+        .tile {
+          border-radius: 16px;
+          box-shadow: 7px 8px 0 var(--ink);
+        }
+
+        .tile::after {
+          top: 20px;
+          right: 22px;
+          font-size: 28px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .tile {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Featured project</p>
+      <a
+        class="tile"
+        href="https://devpost.com/software/textbook-simplifier"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="View Textbook Simplifier on Devpost"
+      >
+        <h1>Textbook Simplifier</h1>
+        <p>
+          Turn dense material into clearer explanations. Visit the project on
+          Devpost to see the story, features, and submission details.
+        </p>
+        <span class="cta">View on Devpost</span>
+      </a>
+    </main>
+  </body>
+</html>
